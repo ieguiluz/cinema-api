@@ -8,15 +8,29 @@ use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
-    public function index() {
-        $schedules = Schedule::orderBy('id')->paginate(10);
+    public function index(Request $request) {
+        $data = Schedule::orderBy('id');
+
+        if ($request->has('active')) {
+            $schedules = $data->where('is_active', true)->get();
+        } else {
+            $schedules = $data->paginate(10);
+        }
 
         return response()->json([
             'schedules' => $schedules,
         ], 200);
     }
 
-    public function show(Schedule $schedule) {
+    public function show($id) {
+        $schedule = Schedule::find($id);
+
+        if (!$schedule) {
+            return response()->json([
+                'msg' => 'Id provided does not exist.',
+            ], 422);
+        }
+
         return response()->json([
             'schedule' => $schedule,
         ], 200);
@@ -29,21 +43,35 @@ class ScheduleController extends Controller
         $new_schedule->save();
 
         return response()->json([
-            'msg' => 'Schedule saved sucessfully',
+            'msg' => 'Schedule saved successfully',
             'new_schedule' => $new_schedule,
         ], 200);
     }
 
     public function update(Request $request, Schedule $schedule) {
-        dump($request->input());
-        dd($schedule);
+        $schedule->time = $request->input('time');
+        $schedule->is_active = $request->input('is_active');
+        $schedule->save();
+
+        return response()->json([
+            'msg' => 'Schedule updated successfully',
+            'schedule' => $schedule,
+        ], 200);
     }
 
-    public function delete(Schedule $schedule) {
+    public function delete($id) {
+        $schedule = Schedule::find($id);
+
+        if (!$schedule) {
+            return response()->json([
+                'msg' => 'Id provided does not exist.',
+            ], 422);
+        }
+
         $schedule->delete();
 
         return response()->json([
-            'msg' => 'Schedule deleted sucessfully',
+            'msg' => 'Schedule deleted successfully',
         ], 200);
     }
 }

@@ -25,17 +25,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // });
 
 Route::group(['prefix' => 'schedules'], function () {
-    Route::get('/', ['uses' => 'ScheduleController@index']);
-    Route::post('/store', ['uses' => 'ScheduleController@store']);
-    Route::get('/{schedule}', ['uses' => 'ScheduleController@show']);
-    Route::put('/{schedule}', ['uses' => 'ScheduleController@update']);
-    Route::delete('/{schedule}', ['uses' => 'ScheduleController@delete']);
+    Route::get('', ['uses' => 'ScheduleController@index']);
+    Route::post('store', ['uses' => 'ScheduleController@store']);
+    Route::get('{schedule}', ['uses' => 'ScheduleController@show']);
+    Route::put('{schedule}', ['uses' => 'ScheduleController@update']);
+    Route::delete('{schedule}', ['uses' => 'ScheduleController@delete']);
 });
 
 Route::group(['prefix' => 'movies'], function () {
-    Route::get('/', ['uses' => 'MovieController@index']);
-    Route::post('/store', ['uses' => 'MovieController@store']);
-    Route::get('/{movie}', ['uses' => 'MovieController@show']);
-    Route::put('/{movie}', ['uses' => 'MovieController@update']);
-    Route::delete('/{movie}', ['uses' => 'MovieController@delete']);
+    Route::get('', ['uses' => 'MovieController@index']);
+    Route::post('store', ['uses' => 'MovieController@store']);
+    Route::post('{movie}/assign-schedules', ['uses' => 'MovieController@assignSchedules']);
+    Route::get('{movie}', ['uses' => 'MovieController@show']);
+    Route::post('{movie}', ['uses' => 'MovieController@update']);
+    Route::delete('{movie}', ['uses' => 'MovieController@delete']);
 });

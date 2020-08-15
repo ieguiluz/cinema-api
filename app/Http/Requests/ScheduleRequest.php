@@ -25,6 +25,7 @@ class ScheduleRequest extends FormRequest
     {
         return [
             'time' => 'required',
+            'is_active' => 'required',
         ];
     }
 

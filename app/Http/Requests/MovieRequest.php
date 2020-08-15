@@ -26,7 +26,8 @@ class MovieRequest extends FormRequest
         return [
             'name' => 'required',
             'release_date' => 'required',
-            'image_path' => 'required',
+            'image' => 'required|mimes:jpg,jpeg,png|max:1014',
+            'is_active' => 'required',
         ];
     }
 
@@ -35,7 +36,7 @@ class MovieRequest extends FormRequest
         return [
             'name.required' => 'Name is required.',
             'release_date.required' => 'Release date is required.',
-            'image_path.required' => 'Image path is required.',
+            'image.max' => 'Image must be smaller than 1MB.',
         ];
     }
 }

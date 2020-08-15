@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Movie extends Model
 {
     use SoftDeletes;
+
     protected $guarded = [];
+    protected $hidden = ['deleted_at'];
 
     public function schedules()
     {

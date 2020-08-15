@@ -1,0 +1,53 @@
+version: "3"
+
+services:
+  nginx:
+    build: ./docker/nginx/
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+    networks:
+      - dockerlocal
+
+  php:
+    build: ./docker/php/
+    user: 1000:1000
+    volumes:
+      - .:/var/www/html
+      - /etc/passwd:/etc/passwd:ro
+    networks:
+      - dockerlocal
+
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cinemadb
+      MYSQL_USER: cinema
+      MYSQL_PASSWORD: password
+    networks:
+      - dockerlocal
+
+  phpmyadmin:
+    depends_on:
+      - mysql
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - dockerlocal
+
+networks:
+  dockerlocal:
+    driver: "bridge"
+
+volumes:
+  mysqldata:
+    driver: "local"

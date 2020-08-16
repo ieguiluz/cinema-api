@@ -27,7 +27,9 @@ class MovieController extends Controller
         }
 
         return response()->json([
-            'movie' => $movie,
+            'movie' => $movie->load(['schedules' => function ($query) {
+                $query->where('is_active', true);
+            }]),
         ], 200);
     }
 
